@@ -4,45 +4,37 @@ class Solution {
 public:
     int calculate(string s) 
     {
-        int sum=0, sign = 1;
-        stack <char> st;
+        int res = 0, sign = 1;
         
-        for(int i=0; i<s.length(); i++)
-        {
-            if(s[i] == ' ')
+        stack<int> st;
+        for(int i = 0; i < s.size(); i++)
+        {            
+            char c = s[i];
+            if(c >= '0' && c <= '9')
             {
-                continue;
-            }
-            else if(isdigit(s[i]))
-            {
-                int num=0;
-                while(isdigit(s[i]) && i<s.length())
-                {
-                    num = num*10 + s[i] - '0';
-                    i++;
-                }
-                sum += num*sign;
+                int num = 0;
+                while(i < s.size() && s[i]>='0' && s[i]<= '9')
+                    num = num * 10 + (s[i++] - '0');
+                res += sign * num;
                 i--;
             }
-            else if(s[i] == '(')
-            {
-                st.push(sum);
+            else if(c =='+') sign = 1;
+            else if(c =='-') sign = -1;
+            else if(c =='(')
+            { 
+                st.push(res);
                 st.push(sign);
-                sum = 0;
+                res = 0;
                 sign = 1;
             }
-            else if(s[i] == ')')
+            else if(c ==')')
             {
-                sum *= st.top();
+                res *= st.top(); 
                 st.pop();
-                sum += st.top();
+                res += st.top(); 
                 st.pop();
             }
-            else if(s[i] == '+')
-                sign = 1;
-            else if(s[i] == '-')
-                sign = -1;
         }
-        return sum;
+        return res;
     }
 };
